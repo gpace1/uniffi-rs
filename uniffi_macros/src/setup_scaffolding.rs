@@ -59,29 +59,29 @@ pub fn setup_scaffolding(namespace: String) -> Result<TokenStream> {
         #[allow(clippy::missing_safety_doc, missing_docs)]
         #[doc(hidden)]
         #[no_mangle]
-        pub extern "C" fn #ffi_rustbuffer_alloc_ident(size: i32, call_status: &mut uniffi::RustCallStatus) -> uniffi::RustBuffer {
-            uniffi::ffi::uniffi_rustbuffer_alloc(size, call_status)
+        pub extern "C" fn #ffi_rustbuffer_alloc_ident(size: i32, call_status: &mut ::uniffi::RustCallStatus) -> ::uniffi::RustBuffer {
+            ::uniffi::ffi::uniffi_rustbuffer_alloc(size, call_status)
         }
 
         #[allow(clippy::missing_safety_doc, missing_docs)]
         #[doc(hidden)]
         #[no_mangle]
-        pub unsafe extern "C" fn #ffi_rustbuffer_from_bytes_ident(bytes: uniffi::ForeignBytes, call_status: &mut uniffi::RustCallStatus) -> uniffi::RustBuffer {
-            uniffi::ffi::uniffi_rustbuffer_from_bytes(bytes, call_status)
+        pub unsafe extern "C" fn #ffi_rustbuffer_from_bytes_ident(bytes: ::uniffi::ForeignBytes, call_status: &mut ::uniffi::RustCallStatus) -> ::uniffi::RustBuffer {
+            ::uniffi::ffi::uniffi_rustbuffer_from_bytes(bytes, call_status)
         }
 
         #[allow(clippy::missing_safety_doc, missing_docs)]
         #[doc(hidden)]
         #[no_mangle]
-        pub unsafe extern "C" fn #ffi_rustbuffer_free_ident(buf: uniffi::RustBuffer, call_status: &mut uniffi::RustCallStatus) {
-            uniffi::ffi::uniffi_rustbuffer_free(buf, call_status);
+        pub unsafe extern "C" fn #ffi_rustbuffer_free_ident(buf: ::uniffi::RustBuffer, call_status: &mut ::uniffi::RustCallStatus) {
+            ::uniffi::ffi::uniffi_rustbuffer_free(buf, call_status);
         }
 
         #[allow(clippy::missing_safety_doc, missing_docs)]
         #[doc(hidden)]
         #[no_mangle]
-        pub unsafe extern "C" fn #ffi_rustbuffer_reserve_ident(buf: uniffi::RustBuffer, additional: i32, call_status: &mut uniffi::RustCallStatus) -> uniffi::RustBuffer {
-            uniffi::ffi::uniffi_rustbuffer_reserve(buf, additional, call_status)
+        pub unsafe extern "C" fn #ffi_rustbuffer_reserve_ident(buf: ::uniffi::RustBuffer, additional: i32, call_status: &mut ::uniffi::RustCallStatus) -> ::uniffi::RustBuffer {
+            ::uniffi::ffi::uniffi_rustbuffer_reserve(buf, additional, call_status)
         }
 
         // Code to re-export the UniFFI scaffolding functions.
@@ -117,7 +117,7 @@ pub fn setup_scaffolding(namespace: String) -> Result<TokenStream> {
         #[allow(unused)]
         trait UniffiCustomTypeConverter {
             type Builtin;
-            fn into_custom(val: Self::Builtin) -> uniffi::Result<Self> where Self: Sized;
+            fn into_custom(val: Self::Builtin) -> ::uniffi::Result<Self> where Self: Sized;
             fn from_custom(obj: Self) -> Self::Builtin;
         }
     })

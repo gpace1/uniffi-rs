@@ -43,7 +43,7 @@ pub(super) fn trait_impl(
         impl ::std::ops::Drop for #ident {
             fn drop(&mut self) {
                 #internals_ident.invoke_callback::<(), crate::UniFfiTag>(
-                    self.handle, uniffi::IDX_CALLBACK_FREE, Default::default()
+                    self.handle, ::uniffi::IDX_CALLBACK_FREE, ::std::default::Default::default()
                 )
             }
         }
@@ -64,7 +64,7 @@ pub fn ffi_converter_callback_interface_impl(
     tag: Option<&Path>,
 ) -> TokenStream {
     let name = ident_to_string(trait_ident);
-    let impl_spec = tagged_impl_header("FfiConverter", &quote! { Box<dyn #trait_ident> }, tag);
+    let impl_spec = tagged_impl_header("FfiConverter", &quote! { ::std::boxed::Box<dyn #trait_ident> }, tag);
     let tag = match tag {
         Some(t) => quote! { #t },
         None => quote! { T },
@@ -93,17 +93,17 @@ pub fn ffi_converter_callback_interface_impl(
                 panic!("Lowering CallbackInterface not supported")
             }
 
-            fn write(_obj: Self, _buf: &mut std::vec::Vec<u8>) {
+            fn write(_obj: Self, _buf: &mut ::std::vec::Vec<u8>) {
                 panic!("Writing CallbackInterface not supported")
             }
 
-            fn try_lift(v: Self::FfiType) -> uniffi::deps::anyhow::Result<Self> {
+            fn try_lift(v: Self::FfiType) -> ::uniffi::deps::anyhow::Result<Self> {
                 Ok(Box::new(<#trait_impl_ident>::new(v)))
             }
 
-            fn try_read(buf: &mut &[u8]) -> uniffi::deps::anyhow::Result<Self> {
-                use uniffi::deps::bytes::Buf;
-                uniffi::check_remaining(buf, 8)?;
+            fn try_read(buf: &mut &[u8]) -> ::uniffi::deps::anyhow::Result<Self> {
+                use ::uniffi::deps::bytes::Buf;
+                ::uniffi::check_remaining(buf, 8)?;
                 <Self as ::uniffi::FfiConverter<crate::UniFfiTag>>::try_lift(buf.get_u64())
             }
 
@@ -154,7 +154,7 @@ fn gen_method_impl(sig: &FnSignature, internals_ident: &Ident) -> syn::Result<To
             #[allow(unused_mut)]
             let mut #buf_ident = ::std::vec::Vec::new();
             #(#write_exprs;)*
-            let uniffi_args_rbuf = uniffi::RustBuffer::from_vec(#buf_ident);
+            let uniffi_args_rbuf = ::uniffi::RustBuffer::from_vec(#buf_ident);
 
             #internals_ident.invoke_callback::<#return_ty, crate::UniFfiTag>(self.handle, #index, uniffi_args_rbuf)
         }

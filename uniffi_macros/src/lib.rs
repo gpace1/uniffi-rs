@@ -272,7 +272,7 @@ pub fn include_scaffolding(component_name: TokenStream) -> TokenStream {
     let name = syn::parse_macro_input!(component_name as LitStr);
     if std::env::var("OUT_DIR").is_err() {
         quote! {
-            compile_error!("This macro assumes the crate has a build.rs script, but $OUT_DIR is not present");
+            ::std::compile_error!("This macro assumes the crate has a build.rs script, but $OUT_DIR is not present");
         }
     } else {
         let udl_name = name.value();
@@ -295,7 +295,7 @@ pub fn include_scaffolding(component_name: TokenStream) -> TokenStream {
             Ok(path) => path.display().to_string(),
             Err(_) => {
                 return quote! {
-                    compile_error!("This macro assumes the crate has a build.rs script, but $OUT_DIR is not present");
+                    ::std::compile_error!("This macro assumes the crate has a build.rs script, but $OUT_DIR is not present");
                 }.into();
             }
         };
@@ -315,7 +315,7 @@ pub fn include_scaffolding(component_name: TokenStream) -> TokenStream {
                 const _: &[u8] = include_bytes!(#toml_path);
             }
 
-            include!(concat!(env!("OUT_DIR"), "/", #name, ".uniffi.rs"));
+            ::std::include!(::std::concat!(::std::env!("OUT_DIR"), "/", #name, ".uniffi.rs"));
         }
     }.into()
 }
@@ -380,19 +380,19 @@ pub fn generate_and_include_scaffolding(udl_file: TokenStream) -> TokenStream {
     let udl_file_path = Utf8Path::new(&udl_file_string);
     if std::env::var("OUT_DIR").is_err() {
         quote! {
-            compile_error!("This macro assumes the crate has a build.rs script, but $OUT_DIR is not present");
+            ::std::compile_error!("This macro assumes the crate has a build.rs script, but $OUT_DIR is not present");
         }
     } else if let Err(e) = uniffi_build::generate_scaffolding(udl_file_path) {
         let err = format!("{e:#}");
         quote! {
-            compile_error!(concat!("Failed to generate scaffolding from UDL file at ", #udl_file, ": ", #err));
+            ::std::compile_error!(concat!("Failed to generate scaffolding from UDL file at ", #udl_file, ": ", #err));
         }
     } else {
         // We know the filename is good because `generate_scaffolding` succeeded,
         // so this `unwrap` will never fail.
         let name = LitStr::new(udl_file_path.file_stem().unwrap(), udl_file.span());
         quote! {
-            uniffi_macros::include_scaffolding!(#name);
+            ::uniffi_macros::include_scaffolding!(#name);
         }
     }.into()
 }

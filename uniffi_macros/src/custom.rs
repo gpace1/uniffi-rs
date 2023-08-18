@@ -26,7 +26,7 @@ pub(crate) fn expand_ffi_converter_custom_type(
                 <#builtin as ::uniffi::FfiConverter<crate::UniFfiTag>>::lower(<#ident as crate::UniffiCustomTypeConverter>::from_custom(obj))
             }
 
-            fn try_lift(v: Self::FfiType) -> uniffi::Result<#ident> {
+            fn try_lift(v: Self::FfiType) -> ::uniffi::Result<#ident> {
                 <#ident as crate::UniffiCustomTypeConverter>::into_custom(<#builtin as ::uniffi::FfiConverter<crate::UniFfiTag>>::try_lift(v)?)
             }
 
@@ -34,7 +34,7 @@ pub(crate) fn expand_ffi_converter_custom_type(
                 <#builtin as ::uniffi::FfiConverter<crate::UniFfiTag>>::write(<#ident as crate::UniffiCustomTypeConverter>::from_custom(obj), buf);
             }
 
-            fn try_read(buf: &mut &[u8]) -> uniffi::Result<#ident> {
+            fn try_read(buf: &mut &[u8]) -> ::uniffi::Result<#ident> {
                 <#ident as crate::UniffiCustomTypeConverter>::into_custom(<#builtin as ::uniffi::FfiConverter<crate::UniFfiTag>>::try_read(buf)?)
             }
 
@@ -69,7 +69,7 @@ fn custom_ffi_type_converter(ident: &Ident, builtin: &Path) -> syn::Result<Token
         impl crate::UniffiCustomTypeConverter for #ident {
             type Builtin = #builtin;
 
-            fn into_custom(val: Self::Builtin) -> uniffi::Result<Self> {
+            fn into_custom(val: Self::Builtin) -> ::uniffi::Result<Self> {
                 Ok(#ident(val))
             }
 

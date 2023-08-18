@@ -83,9 +83,9 @@ pub(crate) fn expand_export(
                     ptr: *const ::std::ffi::c_void,
                     call_status: &mut ::uniffi::RustCallStatus
                 ) {
-                    uniffi::rust_call(call_status, || {
+                    ::uniffi::rust_call(call_status, || {
                         assert!(!ptr.is_null());
-                        drop(unsafe { ::std::boxed::Box::from_raw(ptr as *mut std::sync::Arc<dyn #self_ident>) });
+                        drop(unsafe { ::std::boxed::Box::from_raw(ptr as *mut ::std::sync::Arc<dyn #self_ident>) });
                         Ok(())
                     });
                 }
@@ -188,7 +188,7 @@ pub(crate) fn ffi_converter_trait_impl(trait_ident: &Ident, tag: Option<&Path>) 
             }
 
             fn try_lift(v: Self::FfiType) -> ::uniffi::Result<::std::sync::Arc<Self>> {
-                let foreign_arc = ::std::boxed::Box::leak(unsafe { Box::from_raw(v as *mut ::std::sync::Arc<Self>) });
+                let foreign_arc = ::std::boxed::Box::leak(unsafe { ::std::boxed::Box::from_raw(v as *mut ::std::sync::Arc<Self>) });
                 // Take a clone for our own use.
                 Ok(::std::sync::Arc::clone(foreign_arc))
             }

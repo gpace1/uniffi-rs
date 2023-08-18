@@ -28,8 +28,8 @@ pub fn expand_object(input: DeriveInput, module_path: String) -> TokenStream {
             ptr: *const ::std::ffi::c_void,
             call_status: &mut ::uniffi::RustCallStatus
         ) {
-            uniffi::rust_call(call_status, || {
-                assert!(!ptr.is_null());
+            ::uniffi::rust_call(call_status, || {
+                ::std::assert!(!ptr.is_null());
                 let ptr = ptr.cast::<#ident>();
                 unsafe {
                     ::std::sync::Arc::decrement_strong_count(ptr);
